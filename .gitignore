@@ -1,0 +1,44 @@
+# Folders
+.idea/
+cmake-build-*/
+.mtj.tmp/
+out/
+**/build/
+!src/**/build/
+.idea
+.idea/.gitignore
+
+# Some files idk what do
+atlassian-ide-plugin.xml
+com_crashlytics_export_strings.xml
+crashlytics.properties
+crashlytics-build.properties
+fabric.properties
+
+# Files containing specific filetypes
+*.iml
+*.ipr
+*.iws
+*.class
+*.log
+*.ctxt
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+*.hprof
+
+# PID
+hs_err_pid*
+replay_pid*
+
+# Gradle
+.gradle
+gradle-app.setting
+!gradle-wrapper.jar
+!gradle-wrapper.properties
+.gradletasknamecache
+.project.classpath
