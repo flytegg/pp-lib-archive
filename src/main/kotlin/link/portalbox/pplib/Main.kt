@@ -1,3 +1,8 @@
 package link.portalbox.pplib
 
-fun main(args: Array<String>) {}
+import link.portalbox.pplib.util.getLatestPPVersion
+
+fun main(args: Array<String>) {
+    println("Latest PP Version: ${getLatestPPVersion()}")
+
+}

@@ -1,5 +1,9 @@
 package link.portalbox.pplib.util
 
+import com.google.gson.Gson
+import com.google.gson.JsonParser
+import com.google.gson.reflect.TypeToken
+
 const val BASE_DOMAIN = "https://api.portalbox.link"
 
 /**
@@ -7,9 +11,17 @@ const val BASE_DOMAIN = "https://api.portalbox.link"
  *
  * @return the latest version of the plugin
  */
-fun getPPVersion(): String? {
-    return getJSONFromURL("$BASE_DOMAIN/version")
+fun getLatestPPVersion(): String? {
+    return getPPVersions()?.values?.toTypedArray()?.get(0);
 }
+
+fun getPPVersions(): LinkedHashMap<String, String>? {
+    return Gson().fromJson(
+        JsonParser.parseString(getJSONFromURL("$BASE_DOMAIN/versions")).asJsonObject.get("versions"),
+        object : TypeToken<LinkedHashMap<String, String>>() {}.type
+    )
+}
+
 
 /**
  * Retrieves the plugin index from the API.
