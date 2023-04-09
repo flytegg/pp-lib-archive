@@ -55,10 +55,8 @@ object MarketplacePluginManager {
         val gson = Gson()
         val jsonData: JsonElement = gson.fromJson(getPluginIndex(), JsonElement::class.java)
         for ((key, value) in jsonData.asJsonObject.entrySet()) {
-            try {
+            kotlin.runCatching {
                 marketplaceCache[key.toInt()] = value.asString
-            } catch (x: IllegalArgumentException) {
-                continue
             }
         }
     }
