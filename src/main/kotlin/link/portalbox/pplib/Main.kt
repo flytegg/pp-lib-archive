@@ -7,8 +7,13 @@ import link.portalbox.pplib.type.MarketplaceService
 fun main(args: Array<String>) {
     // PluginPortal: 108700
     // Oraxen: 72448
+    // EssentialsX: 9089
+    // Vault: 34315
+    // WorldEdit: 31034
 
     // Test, delete after
     MarketplacePluginManager.registerService(MarketplaceService.SPIGOTMC, SpigotMCService())
-    println(MarketplacePluginManager.getPlugin(MarketplaceService.SPIGOTMC, "108700"))
+    println(MarketplacePluginManager.getPlugin(MarketplaceService.SPIGOTMC, 9089).downloadURL)
+    println(MarketplacePluginManager.getPlugin(MarketplaceService.SPIGOTMC, 108700).downloadURL)
+    println(MarketplacePluginManager.getPlugin(MarketplaceService.SPIGOTMC, 34315).downloadURL)
 }

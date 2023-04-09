@@ -6,6 +6,8 @@ import link.portalbox.pplib.type.MarketplacePlugin
 import link.portalbox.pplib.type.PluginService
 import link.portalbox.pplib.util.getSpigetJSON
 import link.portalbox.pplib.util.isDirectDownload
+import link.portalbox.pplib.util.isJarFile
+import java.net.URL
 
 class SpigotMCService : PluginService {
     override fun getPlugin(id: String): MarketplacePlugin {
@@ -16,6 +18,15 @@ class SpigotMCService : PluginService {
         val iconUrl = spigetJSON["icon"].asJsonObject?.get("url")?.asString
         val imageUrl = if (iconUrl.isNullOrEmpty()) "https://i.imgur.com/V9jfjSJ.png" else "https://spigotmc.org/$iconUrl"
 
+        var downloadURL: String = "https://api.spiget.org/v2/resources/$id/download";
+
+        if (spigetJSON["file"].asJsonObject["externalUrl"]?.asString != null) {
+            downloadURL = spigetJSON["file"].asJsonObject["externalUrl"]?.asString ?: "null"
+            if (!isJarFile(URL(downloadURL))) {
+                downloadURL = "";
+            }
+        }
+
         return MarketplacePlugin(
             spigetJSON["id"].asString,
             spigetJSON["name"].asString,
@@ -25,7 +36,7 @@ class SpigotMCService : PluginService {
             spigetJSON["rating"].asJsonObject["average"].asDouble,
             imageUrl,
             spigetJSON["versions"].asJsonArray[0].asJsonObject["id"].asString,
-            spigetJSON["file"].asJsonObject["externalUrl"]?.asString ?: "null",
+            downloadURL,
             spigetJSON["file"].asJsonObject["externalUrl"]?.asString?.let { isDirectDownload(it) } ?: false,
             spigetJSON["premium"].asBoolean,
         )

@@ -21,6 +21,11 @@ object MarketplacePluginManager {
         return pluginService?.getPlugin(id) ?: throw ServiceNotFoundException()
     }
 
+    fun getPlugin(service: MarketplaceService, id: Int): MarketplacePlugin {
+        val pluginService = services[service]
+        return pluginService?.getPlugin(id.toString()) ?: throw ServiceNotFoundException()
+    }
+
     /**
      * Registers a MarketplaceService implementation with the corresponding PluginService.
      *
