@@ -15,13 +15,17 @@ fun getLatestPPVersion(): String? {
     return getPPVersions()?.values?.toTypedArray()?.get(0);
 }
 
+/**
+ * Retrieves a map of PP versions from the API.
+ *
+ * @return a LinkedHashMap containing the plugin hash and its version.
+ */
 fun getPPVersions(): LinkedHashMap<String, String>? {
     return Gson().fromJson(
         JsonParser.parseString(getJSONFromURL("$BASE_DOMAIN/versions")).asJsonObject.get("versions"),
         object : TypeToken<LinkedHashMap<String, String>>() {}.type
     )
 }
-
 
 /**
  * Retrieves the plugin index from the API.
