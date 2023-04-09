@@ -13,16 +13,18 @@ class SpigotMCService : PluginService {
             JsonParser.parseString(getSpigetJSON(id)).asJsonObject
         }.onFailure { throw PluginNotFoundException() }.getOrThrow()
 
+        val iconUrl = spigetJSON["icon"].asJsonObject?.get("url")?.asString
+        val imageUrl = if (iconUrl.isNullOrEmpty()) "https://i.imgur.com/V9jfjSJ.png" else "https://spigotmc.org/$iconUrl"
+
         return MarketplacePlugin(
             spigetJSON["id"].asString,
             spigetJSON["name"].asString,
             spigetJSON["tag"].asString,
             spigetJSON["downloads"].asInt,
             spigetJSON["price"].asDouble,
-            spigetJSON["rating"].asJsonObject["count"].asInt,
             spigetJSON["rating"].asJsonObject["average"].asDouble,
+            imageUrl,
             spigetJSON["versions"].asJsonArray[0].asJsonObject["id"].asString,
-            spigetJSON["author"].asJsonObject["id"].asString,
             spigetJSON["file"].asJsonObject["externalUrl"]?.asString ?: "null",
             spigetJSON["file"].asJsonObject["externalUrl"]?.asString?.let { isDirectDownload(it) } ?: false,
             spigetJSON["premium"].asBoolean,

@@ -7,12 +7,11 @@ data class MarketplacePlugin(
     val description: String,
     val downloads: Int,
     val price: Double,
-    val ratingCount: Int,
     val ratingAverage: Double,
+    val iconURL: String,
 
     // Service data
     val version: String,
-    val author: String,
 
     // Download information
     val downloadURL: String,

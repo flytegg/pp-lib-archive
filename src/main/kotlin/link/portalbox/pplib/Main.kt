@@ -10,5 +10,5 @@ fun main(args: Array<String>) {
 
     // Test, delete after
     MarketplacePluginManager.registerService(MarketplaceService.SPIGOTMC, SpigotMCService())
-    println(MarketplacePluginManager.getPlugin(MarketplaceService.SPIGOTMC, "72448"))
+    println(MarketplacePluginManager.getPlugin(MarketplaceService.SPIGOTMC, "108700"))
 }
