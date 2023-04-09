@@ -12,7 +12,7 @@ const val BASE_DOMAIN = "https://api.portalbox.link"
  * @return the latest version of the plugin
  */
 fun getLatestPPVersion(): String? {
-    return getPPVersions()?.values?.toTypedArray()?.get(0);
+    return getPPVersions()?.values?.toTypedArray()?.lastIndex?.let { getPPVersions()?.values?.toTypedArray()?.get(it) }
 }
 
 /**
