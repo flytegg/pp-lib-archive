@@ -34,3 +34,12 @@ fun getPPVersions(): LinkedHashMap<String, String>? {
 fun getPluginIndex(): String? {
     return getJSONFromURL("$BASE_DOMAIN/plugins")
 }
+
+/**
+ * Retrieves the plugin JSON from the API.
+ * @param id The ID of the plugin to retrieve.
+ * @return A JSON string representing the plugin.
+ */
+fun getPluginJSON(id: String): String? {
+    return getJSONFromURL("$BASE_DOMAIN/plugins/$id")
+}

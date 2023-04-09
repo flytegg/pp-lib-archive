@@ -118,7 +118,7 @@ fun isJarFile(url: URL?): Boolean {
             val redirectUrl = connection.getHeaderField("Location")
             if (redirectUrl != null) {
                 val newUrl = URL(redirectUrl)
-                println("$url -> $newUrl")
+                //println("$url -> $newUrl")
                 return isJarFile(newUrl)
             }
         }

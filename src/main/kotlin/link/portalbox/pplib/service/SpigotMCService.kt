@@ -4,6 +4,7 @@ import com.google.gson.JsonParser
 import link.portalbox.pplib.exception.PluginNotFoundException
 import link.portalbox.pplib.type.MarketplacePlugin
 import link.portalbox.pplib.type.PluginService
+import link.portalbox.pplib.util.getPluginJSON
 import link.portalbox.pplib.util.getSpigetJSON
 import link.portalbox.pplib.util.isDirectDownload
 import link.portalbox.pplib.util.isJarFile
@@ -21,9 +22,10 @@ class SpigotMCService : PluginService {
         var downloadURL: String = "https://api.spiget.org/v2/resources/$id/download";
 
         if (spigetJSON["file"].asJsonObject["externalUrl"]?.asString != null) {
-            downloadURL = spigetJSON["file"].asJsonObject["externalUrl"]?.asString ?: "null"
+            downloadURL = spigetJSON["file"].asJsonObject["externalUrl"]?.asString ?: ""
+
             if (!isJarFile(URL(downloadURL))) {
-                downloadURL = "";
+                downloadURL = getPluginJSON(id)?.let { JsonParser.parseString(it).asJsonObject["alternateDownload"].asString } ?: ""
             }
         }
 
