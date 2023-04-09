@@ -51,6 +51,9 @@ object MarketplacePluginManager {
         services[service] = pluginService
     }
 
+    /**
+     * Loads the plugin index data from the server and parses it into the marketplaceCache.
+     */
     fun loadIndex() {
         val gson = Gson()
         val jsonData: JsonElement = gson.fromJson(getPluginIndex(), JsonElement::class.java)
