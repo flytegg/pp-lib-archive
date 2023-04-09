@@ -1,6 +1,7 @@
 package link.portalbox.pplib.util
 
 import java.net.HttpURLConnection
+import java.net.URI
 import java.net.URL
 import java.net.URLEncoder
 import javax.net.ssl.HttpsURLConnection
@@ -72,8 +73,6 @@ fun isDirectDownload(urlString: String): Boolean {
         connection.disconnect()
 
         contentType == "application/octet-stream" && contentLength != -1
-    }.onFailure {
-        it.printStackTrace()
     }.getOrDefault(false)
 }
 
