@@ -2,6 +2,7 @@ package link.portalbox.pplib.util
 
 import java.net.HttpURLConnection
 import java.net.URL
+import java.net.URLEncoder
 import javax.net.ssl.HttpsURLConnection
 
 /**
@@ -60,7 +61,7 @@ fun getSpigetJSON(id: Int): String? {
  */
 fun isDirectDownload(urlString: String): Boolean {
     return runCatching {
-        val url = URL(urlString)
+        val url = URL(URLEncoder.encode(urlString, "UTF-8"))
         val connection = url.openConnection() as HttpsURLConnection
         connection.requestMethod = "HEAD"
         connection.connect()
