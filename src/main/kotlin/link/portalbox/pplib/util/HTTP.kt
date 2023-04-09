@@ -92,7 +92,7 @@ fun convertGitHubToAPI(url: String): String {
  * @param url the URL string to convert to a URL object
  * @return a URL object or null if the conversion failed
  */
-fun getURL(url: String): URL? {
+fun getURL(url: String?): URL? {
     return runCatching {
         URL(url)
     }.onFailure {
@@ -105,9 +105,9 @@ fun getURL(url: String): URL? {
  * @param url the URL to check
  * @return true if the URL points to a JAR file, false otherwise
  */
-fun isJarFile(url: URL): Boolean {
+fun isJarFile(url: URL?): Boolean {
     return runCatching {
-        val connection = url.openConnection() as HttpURLConnection
+        val connection = url?.openConnection() as HttpURLConnection
         connection.instanceFollowRedirects = false
         connection.requestMethod = "HEAD"
         connection.connect()

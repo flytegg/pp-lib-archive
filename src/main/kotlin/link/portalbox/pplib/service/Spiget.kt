@@ -73,7 +73,7 @@ class Spiget(id: Int) : Plugin(SPIGOTMC, id.toString()) {
      */
     fun getSpigetDownloadURL(): URL? {
         externalURL.let { url ->
-            if (isDirectDownload(url) || isJarFile(getURL(url)!!)) {
+            if (isDirectDownload(url) || isJarFile(getURL(url))) {
                 return getURL(url)
             }
         }
