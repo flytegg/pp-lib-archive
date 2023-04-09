@@ -25,7 +25,7 @@ class SpigotMCService : PluginService {
             downloadURL = spigetJSON["file"].asJsonObject["externalUrl"]?.asString ?: ""
 
             if (!isJarFile(URL(downloadURL))) {
-                downloadURL = getPluginJSON(id)?.let { JsonParser.parseString(it).asJsonObject["alternateDownload"].asString } ?: ""
+                downloadURL = getPluginJSON(id)?.let { JsonParser.parseString(it).asJsonObject["alternateDownload"]?.asString } ?: ""
             }
         }
 
