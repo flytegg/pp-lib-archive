@@ -1,5 +1,7 @@
 package link.portalbox.pplib.util
 
+import com.google.gson.JsonParser
+import link.portalbox.pplib.exception.PluginNotFoundException
 import java.net.HttpURLConnection
 import java.net.URI
 import java.net.URL
@@ -50,7 +52,7 @@ fun getPortalBoxPluginJSON(id: Int): String? {
  * @param id the ID of the resource to fetch
  * @return the JSON string for the resource, or null if an error occurred
  */
-fun getSpigetJSON(id: Int): String? {
+fun getSpigetJSON(id: String): String? {
     return getJSONFromURL("https://api.spiget.org/v2/resources/$id")
 }
 
@@ -62,7 +64,7 @@ fun getSpigetJSON(id: Int): String? {
  */
 fun isDirectDownload(urlString: String): Boolean {
     return runCatching {
-        val url = URL(URLEncoder.encode(urlString, "UTF-8"))
+        val url = URL(urlString)
         val connection = url.openConnection() as HttpsURLConnection
         connection.requestMethod = "HEAD"
         connection.connect()

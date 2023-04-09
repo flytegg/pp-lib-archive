@@ -1,12 +1,11 @@
 package link.portalbox.pplib.type
 
-enum class PluginService(val supported: Boolean) {
-
-    BUKKIT(false),
-    CURSEFORGE(false),
-    HANGAR(false),
-    MODRINTH(false),
-    SPIGOTMC(true),
-    CUSTOM(false);
-
+interface PluginService {
+    /**
+     * Gets a MarketplacePlugin object for the specified plugin ID from the marketplace API.
+     *
+     * @param id the ID of the plugin to retrieve
+     * @return a MarketplacePlugin object representing the specified plugin
+     */
+    fun getPlugin(id: String): MarketplacePlugin
 }
