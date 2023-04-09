@@ -50,7 +50,7 @@ class Spiget(id: Int) : Plugin(SPIGOTMC, id.toString()) {
 
         if (portalBoxJSON != null) {
             runCatching {
-                downloadURL = getURL(portalBoxJSON!!["altDownload"].asString)
+                downloadURL = getURL(portalBoxJSON!!["alternateDownload"].asString)
 
                 portalBoxJSON["files"].asJsonObject.entrySet().forEach { entry ->
                     files!![entry.key] = entry.value.asString
@@ -59,7 +59,7 @@ class Spiget(id: Int) : Plugin(SPIGOTMC, id.toString()) {
         }
 
         if (downloadURL == null || downloadURL.toString().isEmpty()) {
-            downloadURL = getDownloadURL()
+            downloadURL = getSpigetDownloadURL()
         }
     }
 
@@ -71,7 +71,7 @@ class Spiget(id: Int) : Plugin(SPIGOTMC, id.toString()) {
      *
      * @return The download URL for the plugin, or null if no suitable download URL could be found.
      */
-    fun getDownloadURL(): URL? {
+    fun getSpigetDownloadURL(): URL? {
         externalURL.let { url ->
             if (isDirectDownload(url) || isJarFile(getURL(url)!!)) {
                 return getURL(url)
