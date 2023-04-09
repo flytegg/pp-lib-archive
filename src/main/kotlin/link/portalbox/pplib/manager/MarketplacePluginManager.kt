@@ -13,7 +13,7 @@ import link.portalbox.pplib.util.getPluginIndex
 
 object MarketplacePluginManager {
     private val services: MutableMap<MarketplaceService, PluginService> = mutableMapOf()
-    public val marketplaceCache: BiMap<Int, String> = HashBiMap.create()
+    val marketplaceCache: BiMap<Int, String> = HashBiMap.create()
 
     /**
      * Gets a MarketplacePlugin object for the specified plugin ID from the specified MarketplaceService.
@@ -28,6 +28,14 @@ object MarketplacePluginManager {
         return pluginService?.getPlugin(id) ?: throw ServiceNotFoundException()
     }
 
+    /**
+     * Gets a MarketplacePlugin object for the specified plugin ID from the specified MarketplaceService.
+     *
+     * @param service the MarketplaceService to use for retrieving the plugin
+     * @param id the ID of the plugin to retrieve
+     * @return a MarketplacePlugin object representing the specified plugin
+     * @throws ServiceNotFoundException if the specified service is not found in the services map
+     */
     fun getPlugin(service: MarketplaceService, id: Int): MarketplacePlugin {
         val pluginService = services[service]
         return pluginService?.getPlugin(id.toString()) ?: throw ServiceNotFoundException()

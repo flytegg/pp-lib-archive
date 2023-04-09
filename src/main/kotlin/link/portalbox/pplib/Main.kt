@@ -1,7 +1,6 @@
 package link.portalbox.pplib
 
 import link.portalbox.pplib.manager.MarketplacePluginManager
-import link.portalbox.pplib.manager.MarketplacePluginManager.loadIndex
 import link.portalbox.pplib.service.SpigotMCService
 import link.portalbox.pplib.type.MarketplaceService
 import link.portalbox.pplib.util.getLatestPPVersion
@@ -21,7 +20,4 @@ fun main(args: Array<String>) {
     println(MarketplacePluginManager.getPlugin(MarketplaceService.SPIGOTMC, 34315).downloadURL)
     println(getLatestPPVersion())
     println(getPPVersions())
-
-    loadIndex()
-    println(MarketplacePluginManager.marketplaceCache)
 }
