@@ -17,7 +17,7 @@ class SpigotMCService : PluginService {
         }.onFailure { throw PluginNotFoundException() }.getOrThrow()
 
         val iconUrl = spigetJSON["icon"].asJsonObject?.get("url")?.asString
-        val imageUrl = if (iconUrl.isNullOrEmpty()) "https://i.imgur.com/V9jfjSJ.png" else "https://spigotmc.org/$iconUrl"
+        val imageUrl = if (iconUrl.isNullOrEmpty()) "https://i.imgur.com/V9jfjSJ.png" else "https://www.spigotmc.org/$iconUrl"
 
         var downloadURL: String = "https://api.spiget.org/v2/resources/$id/download";
 
