@@ -29,6 +29,12 @@ class SpigotMCService : PluginService {
             }
         }
 
+        var isPremium = false;
+        runCatching {
+            isPremium = spigetJSON["premium"].asBoolean
+        }.onFailure { isPremium = false }
+
+
         return MarketplacePlugin(
             spigetJSON["id"].asString,
             spigetJSON["name"].asString,
@@ -39,7 +45,7 @@ class SpigotMCService : PluginService {
             imageUrl,
             spigetJSON["versions"].asJsonArray[0].asJsonObject["id"].asString,
             downloadURL,
-            spigetJSON["premium"].asBoolean,
+            isPremium,
         )
     }
 }
