@@ -39,7 +39,6 @@ class SpigotMCService : PluginService {
             imageUrl,
             spigetJSON["versions"].asJsonArray[0].asJsonObject["id"].asString,
             downloadURL,
-            spigetJSON["file"].asJsonObject["externalUrl"]?.asString?.let { isDirectDownload(it) } ?: false,
             spigetJSON["premium"].asBoolean,
         )
     }

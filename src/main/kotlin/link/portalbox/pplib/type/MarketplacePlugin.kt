@@ -15,6 +15,5 @@ data class MarketplacePlugin(
 
     // Download information
     val downloadURL: String,
-    val isDirectDownload: Boolean,
     val isPremium: Boolean,
 )
