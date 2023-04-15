@@ -3,8 +3,10 @@ package link.portalbox.pplib.util
 import com.google.gson.Gson
 import com.google.gson.JsonParser
 import com.google.gson.reflect.TypeToken
+import link.portalbox.pplib.type.VersionType
 
 const val BASE_DOMAIN = "https://api.portalbox.link"
+
 
 /**
  * Retrieves the latest version of the plugin from the API.
@@ -13,6 +15,21 @@ const val BASE_DOMAIN = "https://api.portalbox.link"
  */
 fun getLatestPPVersion(): String? {
     return getPPVersions()?.values?.toTypedArray()?.lastIndex?.let { getPPVersions()?.values?.toTypedArray()?.get(it) }
+}
+
+fun getLatestVersion(version: String): VersionType {
+    val latestVersion = getLatestPPVersion() ?: return VersionType.UNRELEASED
+
+    val currentVersionParts = version.split(".")
+    val latestVersionParts = latestVersion.split(".")
+
+    return when {
+        latestVersionParts[0].toInt() > currentVersionParts[0].toInt() -> VersionType.MAJOR
+        latestVersionParts[1].toInt() > currentVersionParts[1].toInt() -> VersionType.MINOR
+        latestVersionParts[2].toInt() > currentVersionParts[2].toInt() -> VersionType.PATCH
+        latestVersion == version -> VersionType.LATEST
+        else -> VersionType.UNRELEASED
+    }
 }
 
 /**

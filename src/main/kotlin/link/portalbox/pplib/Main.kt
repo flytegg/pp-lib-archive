@@ -4,12 +4,10 @@ import link.portalbox.pplib.manager.MarketplacePluginManager
 import link.portalbox.pplib.manager.MarketplacePluginManager.loadIndex
 import link.portalbox.pplib.service.SpigotMCService
 import link.portalbox.pplib.type.MarketplaceService
-import java.net.URL
-import javax.imageio.ImageIO
+import link.portalbox.pplib.util.getLatestPPVersion
+import link.portalbox.pplib.util.getLatestVersion
 
 fun main(args: Array<String>) {
     MarketplacePluginManager.registerService(MarketplaceService.SPIGOTMC, SpigotMCService())
     loadIndex()
-    val plugin = MarketplacePluginManager.getPlugin(MarketplaceService.SPIGOTMC, 22419)
-    println(plugin.isPremium)
 }
