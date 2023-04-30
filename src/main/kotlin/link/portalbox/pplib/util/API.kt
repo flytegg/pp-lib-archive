@@ -5,7 +5,8 @@ import com.google.gson.JsonParser
 import com.google.gson.reflect.TypeToken
 import link.portalbox.pplib.type.VersionType
 
-const val BASE_DOMAIN = "https://api.portalbox.link"
+//const val BASE_DOMAIN = "https://api.portalbox.link"
+const val BASE_DOMAIN = "localhost:8080"
 
 
 /**
@@ -49,7 +50,8 @@ fun getPPVersions(): LinkedHashMap<String, String>? {
  * @return A JSON string representing the plugin index.
  */
 fun getPluginIndex(): String? {
-    return getJSONFromURL("$BASE_DOMAIN/plugins")
+    println("$BASE_DOMAIN/v2/plugins")
+    return getJSONFromURL("$BASE_DOMAIN/v2/plugins")
 }
 
 /**
@@ -58,5 +60,5 @@ fun getPluginIndex(): String? {
  * @return A JSON string representing the plugin.
  */
 fun getPluginJSON(id: String): String? {
-    return getJSONFromURL("$BASE_DOMAIN/plugins/$id")
+    return getJSONFromURL("$BASE_DOMAIN/v2/plugins/$id")
 }

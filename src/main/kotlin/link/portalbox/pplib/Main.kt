@@ -10,4 +10,6 @@ import link.portalbox.pplib.util.getLatestVersion
 fun main(args: Array<String>) {
     MarketplacePluginManager.registerService(MarketplaceService.SPIGOTMC, SpigotMCService())
     loadIndex()
+
+    println(getLatestPPVersion())
 }

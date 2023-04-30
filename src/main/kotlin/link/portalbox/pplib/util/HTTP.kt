@@ -1,7 +1,10 @@
 package link.portalbox.pplib.util
 
+import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import link.portalbox.pplib.exception.PluginNotFoundException
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import java.net.HttpURLConnection
 import java.net.URI
 import java.net.URL
@@ -14,27 +17,14 @@ import javax.net.ssl.HttpsURLConnection
  * @param urlString The URL from which to retrieve the JSON content.
  * @return The JSON content as a String, or null if an error occurs.
  */
-fun getJSONFromURL(urlString: String): String? {
-    return runCatching {
-        URL(urlString).openConnection().run {
-            this as HttpsURLConnection
-            requestMethod = "GET"
-            setRequestProperty("User-Agent", "PortalBox/1.0")
-            setRequestProperty("Connection", "keep-alive")
-            doOutput = true
-
-            val statusCode = responseCode
-            if (statusCode == 403 || statusCode == 500) {
-                null
-            } else {
-                inputStream.bufferedReader().useLines { lines ->
-                    lines.joinToString(separator = "\n")
-                }
-            }
-        }
-    }.onFailure {
-        null
-    }.getOrNull()
+fun getJSONFromURL(url: String) : JsonObject {
+    return JsonParser.parseString(
+        getClient().newCall(Request.Builder()
+            .url(url)
+            .header("User-Agent", "portal-box/pp-lib")
+            .build()
+        ).execute().body.string()
+    ).asJsonObject
 }
 
 /**
@@ -43,7 +33,7 @@ fun getJSONFromURL(urlString: String): String? {
  * @param id the ID of the plugin to retrieve
  * @return the JSON content of the plugin, or null if an error occurs
  */
-fun getPortalBoxPluginJSON(id: Int): String? {
+fun getPortalBoxPluginJSON(id: Int): JsonObject {
     return getJSONFromURL("https://api.portalbox.link/plugins/$id")
 }
 
@@ -52,7 +42,7 @@ fun getPortalBoxPluginJSON(id: Int): String? {
  * @param id the ID of the resource to fetch
  * @return the JSON string for the resource, or null if an error occurred
  */
-fun getSpigetJSON(id: String): String? {
+fun getSpigetJSON(id: String): JsonObject {
     return getJSONFromURL("https://api.spiget.org/v2/resources/$id")
 }
 
@@ -132,4 +122,9 @@ fun isJarFile(url: URL?): Boolean {
                 || (contentDisposition != null && contentDisposition.lowercase().contains(".jar"))
                 || (url.toString().lowercase().endsWith(".jar"))
     }.getOrDefault(false)
+}
+
+private fun getClient() : OkHttpClient {
+    return OkHttpClient.Builder()
+        .build()
 }

@@ -1,19 +1,20 @@
 package link.portalbox.pplib.manager
 
-import com.google.common.collect.BiMap
-import com.google.common.collect.HashBiMap
 import com.google.gson.Gson
-import com.google.gson.JsonElement
 import link.portalbox.pplib.exception.ServiceNotFoundException
 import link.portalbox.pplib.type.MarketplacePlugin
 import link.portalbox.pplib.type.MarketplaceService
 import link.portalbox.pplib.type.PluginService
 import link.portalbox.pplib.util.getPluginIndex
+import java.lang.reflect.Type;
+import com.google.gson.reflect.TypeToken;
 
 
 object MarketplacePluginManager {
+
     private val services: MutableMap<MarketplaceService, PluginService> = mutableMapOf()
-    val marketplaceCache: BiMap<Int, String> = HashBiMap.create()
+    var marketplaceCache: HashMap<MarketplaceService, HashMap<String, MarketplacePlugin>> = HashMap()
+    val gson = Gson()
 
     /**
      * Gets a MarketplacePlugin object for the specified plugin ID from the specified MarketplaceService.
@@ -55,6 +56,11 @@ object MarketplacePluginManager {
      * Loads the plugin index data from the server and parses it into the marketplaceCache.
      */
     fun loadIndex() {
+        println(getPluginIndex())
+        marketplaceCache = gson.fromJson(getPluginIndex(), object : TypeToken<HashMap<MarketplaceService, HashMap<String, MarketplacePlugin>>>() {}.type)
+    }
+
+        /*
         val gson = Gson()
         val jsonData: JsonElement = gson.fromJson(getPluginIndex(), JsonElement::class.java)
         for ((key, value) in jsonData.asJsonObject.entrySet()) {
@@ -63,4 +69,6 @@ object MarketplacePluginManager {
             }
         }
     }
+
+         */
 }
