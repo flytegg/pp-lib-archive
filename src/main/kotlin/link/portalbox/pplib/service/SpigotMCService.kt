@@ -13,7 +13,7 @@ import java.net.URL
 class SpigotMCService : PluginService {
     override fun getPlugin(id: String): MarketplacePlugin {
         val spigetJSON = kotlin.runCatching {
-            JsonParser.parseString(getSpigetJSON(id)).asJsonObject
+            getSpigetJSON(id)
         }.onFailure { throw PluginNotFoundException() }.getOrThrow()
 
         val iconUrl = spigetJSON["icon"].asJsonObject?.get("url")?.asString
@@ -25,7 +25,7 @@ class SpigotMCService : PluginService {
             downloadURL = spigetJSON["file"].asJsonObject["externalUrl"]?.asString ?: ""
 
             if (!isJarFile(URL(downloadURL))) {
-                downloadURL = getPluginJSON(id)?.let { JsonParser.parseString(it).asJsonObject["alternateDownload"]?.asString } ?: ""
+                downloadURL = getPluginJSON(id)?.let { it["alternateDownload"]?.asString } ?: ""
             }
         }
 
