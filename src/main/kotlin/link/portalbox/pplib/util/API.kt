@@ -1,6 +1,7 @@
 package link.portalbox.pplib.util
 
 import com.google.gson.Gson
+import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.google.gson.reflect.TypeToken
 import link.portalbox.pplib.type.VersionType
@@ -40,7 +41,7 @@ fun getLatestVersion(version: String): VersionType {
  */
 fun getPPVersions(): LinkedHashMap<String, String>? {
     return Gson().fromJson(
-        JsonParser.parseString(getJSONFromURL("$BASE_DOMAIN/versions")).asJsonObject.get("versions"),
+        getJSONFromURL("$BASE_DOMAIN/versions").asJsonObject.get("versions"),
         object : TypeToken<LinkedHashMap<String, String>>() {}.type
     )
 }
@@ -49,7 +50,7 @@ fun getPPVersions(): LinkedHashMap<String, String>? {
  * Retrieves the plugin index from the API.
  * @return A JSON string representing the plugin index.
  */
-fun getPluginIndex(): String? {
+fun getPluginIndex(): JsonObject {
     println("$BASE_DOMAIN/v2/plugins")
     return getJSONFromURL("$BASE_DOMAIN/v2/plugins")
 }
@@ -59,6 +60,6 @@ fun getPluginIndex(): String? {
  * @param id The ID of the plugin to retrieve.
  * @return A JSON string representing the plugin.
  */
-fun getPluginJSON(id: String): String? {
+fun getPluginJSON(id: String): JsonObject {
     return getJSONFromURL("$BASE_DOMAIN/v2/plugins/$id")
 }
