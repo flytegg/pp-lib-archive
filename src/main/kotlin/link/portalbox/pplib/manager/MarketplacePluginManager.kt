@@ -1,6 +1,9 @@
 package link.portalbox.pplib.manager
 
+import com.google.common.collect.BiMap
+import com.google.common.collect.HashBiMap
 import com.google.gson.Gson
+import com.google.gson.JsonObject
 import link.portalbox.pplib.exception.ServiceNotFoundException
 import link.portalbox.pplib.type.MarketplacePlugin
 import link.portalbox.pplib.type.MarketplaceService
@@ -8,13 +11,16 @@ import link.portalbox.pplib.type.PluginService
 import link.portalbox.pplib.util.getPluginIndex
 import java.lang.reflect.Type;
 import com.google.gson.reflect.TypeToken;
+import link.portalbox.pplib.service.SpigotMCService
 
 
 object MarketplacePluginManager {
 
+    // BiMap<Id, String>
+    var marketplaceCache: BiMap<String, String> = HashBiMap.create()
+
     private val services: MutableMap<MarketplaceService, PluginService> = mutableMapOf()
-    var marketplaceCache: HashMap<MarketplaceService, HashMap<String, MarketplacePlugin>> = HashMap()
-    val gson = Gson()
+    private val gson = Gson()
 
     /**
      * Gets a MarketplacePlugin object for the specified plugin ID from the specified MarketplaceService.
@@ -56,8 +62,16 @@ object MarketplacePluginManager {
      * Loads the plugin index data from the server and parses it into the marketplaceCache.
      */
     fun loadIndex() {
-        println(getPluginIndex())
-        marketplaceCache = gson.fromJson(getPluginIndex(), object : TypeToken<HashMap<MarketplaceService, HashMap<String, MarketplacePlugin>>>() {}.type)
+        val jsonObject: JsonObject = Gson().fromJson(getPluginIndex(), JsonObject::class.java)
+
+        for (entry in jsonObject.entrySet()) {
+            for (pluginEntry in entry.value.asJsonObject.entrySet()) {
+                val serviceName = entry.key
+                if (!marketplaceCache.containsKey("${serviceName}:${pluginEntry.key}") && !marketplaceCache.containsValue("${serviceName}:${pluginEntry.value.asString}")) {
+                    marketplaceCache["${serviceName}:${pluginEntry.key}"] = "${serviceName}:${pluginEntry.value.asString}"
+                }
+            }
+        }
     }
 
         /*
