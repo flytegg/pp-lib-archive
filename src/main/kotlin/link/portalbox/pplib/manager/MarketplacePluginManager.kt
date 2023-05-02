@@ -23,7 +23,7 @@ object MarketplacePluginManager {
     private val gson = Gson()
 
     /**
-     * Gets a MarketplacePlugin object for the specified plugin ID from the specified MarketplaceService.
+     * Gets a MarketplacePlugin object for the specified plugin ID (without service in string) from the specified MarketplaceService.
      *
      * @param service the MarketplaceService to use for retrieving the plugin
      * @param id the ID of the plugin to retrieve
@@ -36,16 +36,15 @@ object MarketplacePluginManager {
     }
 
     /**
-     * Gets a MarketplacePlugin object for the specified plugin ID from the specified MarketplaceService.
+     * Gets a MarketplacePlugin object for the specified plugin ID
      *
-     * @param service the MarketplaceService to use for retrieving the plugin
-     * @param id the ID of the plugin to retrieve
+     * @param id the ID of the plugin to retrieve with the format "service:id"
      * @return a MarketplacePlugin object representing the specified plugin
      * @throws ServiceNotFoundException if the specified service is not found in the services map
      */
-    fun getPlugin(service: MarketplaceService, id: Int): MarketplacePlugin {
-        val pluginService = services[service]
-        return pluginService?.getPlugin(id.toString()) ?: throw ServiceNotFoundException()
+    fun getPlugin(id: String): MarketplacePlugin {
+        val args = id.split(":")
+        return getPlugin(MarketplaceService.valueOf(args[0].uppercase()), args[1])
     }
 
     /**
