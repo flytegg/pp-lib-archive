@@ -3,6 +3,7 @@ package link.portalbox.pplib.service
 import com.google.gson.JsonParser
 import link.portalbox.pplib.exception.PluginNotFoundException
 import link.portalbox.pplib.type.MarketplacePlugin
+import link.portalbox.pplib.type.MarketplaceService
 import link.portalbox.pplib.type.PluginService
 import link.portalbox.pplib.util.getPluginJSON
 import link.portalbox.pplib.util.getSpigetJSON
@@ -36,6 +37,7 @@ class SpigotMCService : PluginService {
 
 
         return MarketplacePlugin(
+            MarketplaceService.SPIGOTMC,
             spigetJSON["id"].asString,
             spigetJSON["name"].asString,
             spigetJSON["tag"].asString,

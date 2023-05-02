@@ -2,6 +2,7 @@ package link.portalbox.pplib.service
 
 import gg.flyte.hangerApi.HangarClient
 import link.portalbox.pplib.type.MarketplacePlugin
+import link.portalbox.pplib.type.MarketplaceService
 import link.portalbox.pplib.type.PluginService
 
 class HangarService : PluginService {
@@ -9,6 +10,7 @@ class HangarService : PluginService {
         val args = id.split(":")
         val plugin = HangarClient.getProject(args[0],args[1])
         return MarketplacePlugin(
+            MarketplaceService.HANGAR,
             plugin.namespace.slug,
             plugin.namespace.owner,
             plugin.description,
