@@ -4,7 +4,12 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.google.gson.reflect.TypeToken
+import link.portalbox.pplib.type.RequestPlugin
 import link.portalbox.pplib.type.VersionType
+import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.IOException
 
 const val BASE_DOMAIN = "https://api.portalbox.link"
 
@@ -59,4 +64,21 @@ fun getPluginIndex(): JsonObject {
  */
 fun getPluginJSON(id: String): JsonObject {
     return getJSONFromURL("$BASE_DOMAIN/v2/plugins/$id")
+}
+
+/**
+ * Requests a plugin from the developers via a RestAPI post request.
+ * @param requestPlugin The plugin to request.
+ */
+fun requestPlugin(requestPlugin: RequestPlugin): String {
+    val client = getClient()
+    val request = Request.Builder()
+        .url("$BASE_DOMAIN/v2/plugins")
+        .method("POST", Gson().toJson(requestPlugin).toString().toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull()))
+        .build()
+
+    client.newCall(request).execute().use { response ->
+        if (!response.isSuccessful) throw IOException("Unexpected code $response")
+        return response.body.string()
+    }
 }

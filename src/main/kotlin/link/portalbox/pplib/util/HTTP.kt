@@ -124,7 +124,7 @@ fun isJarFile(url: URL?): Boolean {
     }.getOrDefault(false)
 }
 
-private fun getClient() : OkHttpClient {
+fun getClient() : OkHttpClient {
     return OkHttpClient.Builder()
         .build()
 }

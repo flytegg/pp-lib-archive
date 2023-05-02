@@ -8,13 +8,15 @@ import link.portalbox.pplib.manager.MarketplacePluginManager.loadIndex
 import link.portalbox.pplib.manager.MarketplacePluginManager.marketplaceCache
 import link.portalbox.pplib.service.SpigotMCService
 import link.portalbox.pplib.type.MarketplaceService
+import link.portalbox.pplib.type.RequestPlugin
 import link.portalbox.pplib.util.getLatestPPVersion
 import link.portalbox.pplib.util.getLatestVersion
+import link.portalbox.pplib.util.requestPlugin
 import java.io.File
 
 fun main(args: Array<String>) {
-    MarketplacePluginManager.registerService(MarketplaceService.SPIGOTMC, SpigotMCService())
-    loadIndex()
+    //MarketplacePluginManager.registerService(MarketplaceService.SPIGOTMC, SpigotMCService())
+    //loadIndex()
 
-    println(getPlugin("spigotmc:9089"))
+    requestPlugin(RequestPlugin("id", MarketplaceService.SPIGOTMC, "username", "reasonForRequest"))
 }
