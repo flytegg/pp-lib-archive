@@ -1,6 +1,8 @@
 package link.portalbox.pplib.type
 
 data class MarketplacePlugin(
+    val service: MarketplaceService,
+
     // Plugin information
     val id: String,
     val name: String,
