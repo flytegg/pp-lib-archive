@@ -46,12 +46,10 @@ object MarketplacePluginManager {
         val args = id.split(":").toMutableList()
         val marketplaceService = MarketplaceService.valueOf(args[0].uppercase())
 
-        println(args.size)
         if (args.size == 3) {
             args[1] = "${args[1]}:${args[2]}"
         }
 
-        println("$marketplaceService ${args[1]}")
         return getPlugin(marketplaceService, args[1])
     }
 
