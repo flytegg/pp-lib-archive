@@ -43,8 +43,14 @@ object MarketplacePluginManager {
      * @throws ServiceNotFoundException if the specified service is not found in the services map
      */
     fun getPlugin(id: String): MarketplacePlugin {
-        val args = id.split(":")
-        return getPlugin(MarketplaceService.valueOf(args[0].uppercase()), args[1])
+        val args = id.split(":").toMutableList()
+        val marketplaceService = MarketplaceService.valueOf(args[0].uppercase())
+
+        if (args.size == 3) {
+            args[1] = "${args[1]}:${args[2]}"
+        }
+
+        return getPlugin(marketplaceService, args[1])
     }
 
     /**
