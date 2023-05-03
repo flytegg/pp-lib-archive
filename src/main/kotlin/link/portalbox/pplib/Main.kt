@@ -13,4 +13,5 @@ fun main(args: Array<String>) {
     loadIndex()
 
     println(getPlugin("HANGAR:stephen:PluginPortal"))
+    println(getPlugin("SPIGOTMC:EssentialsX"))
 }

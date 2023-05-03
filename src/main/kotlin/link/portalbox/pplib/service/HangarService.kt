@@ -12,7 +12,7 @@ class HangarService : PluginService {
         return MarketplacePlugin(
             MarketplaceService.HANGAR,
             plugin.namespace.slug,
-            plugin.namespace.owner,
+            plugin.name,
             plugin.description,
             plugin.stats.downloads,
             0.0,
