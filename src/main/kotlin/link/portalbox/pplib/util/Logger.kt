@@ -1,5 +1,6 @@
 package link.portalbox.pplib.util
 
+import link.portalbox.pplib.type.PostError
 import java.io.BufferedWriter
 import java.io.File
 import java.io.FileWriter
@@ -7,6 +8,7 @@ import java.util.logging.Level
 import java.util.logging.Logger
 
 private const val LOGGER_NAME = "Plugin Portal"
+lateinit var defaultPostError : PostError
 
 /**
  * Logs a message with the given logging level.
@@ -78,7 +80,11 @@ private fun getLogFile(): File {
         runCatching {
             latestLogFile.createNewFile()
         }.onFailure {
-            log(Level.SEVERE, "Could not create ${latestLogFile.name}, please report this to our discord: discord.gg/portalbox", true)
+            log(
+                Level.SEVERE,
+                "Could not create ${latestLogFile.name}, please report this to our discord: discord.gg/portalbox",
+                true
+            )
             it.printStackTrace()
         }
     }
@@ -101,7 +107,21 @@ private fun saveToLog(message: String) {
             writer.flush()
         }
     }.onFailure {
-        log(Level.SEVERE, "Could not write to log file, Please report this to our discord: discord.gg/portalbox", true)
+        log(Level.SEVERE, "Could not write to log file, Please report this to our discord: discord.gg/pluginportal", true)
         it.printStackTrace()
+    }
+}
+
+fun startErrorCatcher(postError: PostError) {
+    defaultPostError = postError
+    Thread.setDefaultUncaughtExceptionHandler { _, e ->
+        e.printStackTrace()
+        sendError(
+            PostError(
+            defaultPostError.pluginVersion,
+            defaultPostError.mcVersion,
+            e.stackTraceToString(),
+        )
+        )
     }
 }

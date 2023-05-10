@@ -1,17 +1,32 @@
 package link.portalbox.pplib
 
-import link.portalbox.pplib.manager.MarketplacePluginManager
-import link.portalbox.pplib.manager.MarketplacePluginManager.getPlugin
-import link.portalbox.pplib.manager.MarketplacePluginManager.loadIndex
-import link.portalbox.pplib.service.HangarService
-import link.portalbox.pplib.service.SpigotMCService
+import gg.flyte.hangerApi.HangarClient
 import link.portalbox.pplib.type.MarketplaceService
+import link.portalbox.pplib.type.PostError
+import link.portalbox.pplib.type.RequestPlugin
+import link.portalbox.pplib.util.*
+import okhttp3.OkHttpClient
 
 fun main(args: Array<String>) {
-    MarketplacePluginManager.registerService(MarketplaceService.SPIGOTMC, SpigotMCService())
-    MarketplacePluginManager.registerService(MarketplaceService.HANGAR, HangarService())
-    loadIndex()
+    startErrorCatcher(
+        PostError(
+            "1.0.0",
+            "1.16.5",
+            "",
+        )
+    )
 
-    println(getPlugin("HANGAR:stephen:PluginPortal"))
-    println(getPlugin("SPIGOTMC:EssentialsX"))
+    requestPlugin(
+        RequestPlugin(
+            "9089",
+            MarketplaceService.SPIGOTMC,
+            "Invalid Download URL",
+            "EssentialsX",
+            "https://www.spigotmc.org/resources/essentialsx.9089/download?version=466639",
+            "Dawsson"
+        )
+    )
+
+    throw NullPointerException("Hi Stephen!")
+
 }
