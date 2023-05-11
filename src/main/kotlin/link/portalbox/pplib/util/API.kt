@@ -13,8 +13,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
 import java.lang.Exception
 
-//const val BASE_DOMAIN = "https://api.portalbox.link"
-const val BASE_DOMAIN = "http://localhost:5005"
+const val BASE_DOMAIN = "https://api.portalbox.link"
 
 /**
  * Retrieves the latest version of the plugin from the API.
