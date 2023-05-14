@@ -1,30 +1,16 @@
 package link.portalbox.pplib
 
+import link.portalbox.pplib.manager.MarketplacePluginManager
+import link.portalbox.pplib.service.HangarService
+import link.portalbox.pplib.service.SpigotMCService
 import link.portalbox.pplib.type.MarketplaceService
-import link.portalbox.pplib.type.PostError
-import link.portalbox.pplib.type.RequestPlugin
-import link.portalbox.pplib.util.*
+import link.portalbox.pplib.util.getPPVersions
+import link.portalbox.pplib.util.getPluginFromName
+import link.portalbox.pplib.util.separateServiceAndName
 
-fun main(args: Array<String>) {
-    startErrorCatcher(
-        PostError(
-            "1.0.0",
-            "1.16.5",
-            "",
-        )
-    )
+fun main() {
+    MarketplacePluginManager.registerService(MarketplaceService.SPIGOTMC, SpigotMCService())
+    MarketplacePluginManager.registerService(MarketplaceService.HANGAR, HangarService())
 
-    requestPlugin(
-        RequestPlugin(
-            "9089",
-            MarketplaceService.SPIGOTMC,
-            "Invalid Download URL",
-            "EssentialsX",
-            "https://www.spigotmc.org/resources/essentialsx.9089/download?version=466639",
-            "Dawsson"
-        )
-    )
-
-    throw NullPointerException("Hi Stephen!")
-
+    println(getPluginFromName("EssentialsX"))
 }

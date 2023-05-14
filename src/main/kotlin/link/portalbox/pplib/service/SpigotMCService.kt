@@ -1,13 +1,11 @@
 package link.portalbox.pplib.service
 
-import com.google.gson.JsonParser
 import link.portalbox.pplib.exception.PluginNotFoundException
 import link.portalbox.pplib.type.MarketplacePlugin
 import link.portalbox.pplib.type.MarketplaceService
-import link.portalbox.pplib.type.PluginService
+import link.portalbox.pplib.type.api.PluginService
 import link.portalbox.pplib.util.getPluginJSON
 import link.portalbox.pplib.util.getSpigetJSON
-import link.portalbox.pplib.util.isDirectDownload
 import link.portalbox.pplib.util.isJarFile
 import java.net.URL
 
@@ -26,7 +24,7 @@ class SpigotMCService : PluginService {
             downloadURL = spigetJSON["file"].asJsonObject["externalUrl"]?.asString ?: ""
 
             if (!isJarFile(URL(downloadURL))) {
-                downloadURL = getPluginJSON(id)?.let { it["alternateDownload"]?.asString } ?: ""
+                downloadURL = getPluginJSON(id).let { it["alternateDownload"]?.asString } ?: ""
             }
         }
 

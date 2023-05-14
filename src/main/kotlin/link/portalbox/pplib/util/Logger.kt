@@ -1,6 +1,6 @@
 package link.portalbox.pplib.util
 
-import link.portalbox.pplib.type.PostError
+import link.portalbox.pplib.type.api.PostError
 import java.io.BufferedWriter
 import java.io.File
 import java.io.FileWriter

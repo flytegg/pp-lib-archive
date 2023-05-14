@@ -1,4 +1,4 @@
-package link.portalbox.pplib.type
+package link.portalbox.pplib.type.api
 
 data class PostError(
     val pluginVersion: String,

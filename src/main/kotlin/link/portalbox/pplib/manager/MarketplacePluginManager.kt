@@ -7,11 +7,9 @@ import com.google.gson.JsonObject
 import link.portalbox.pplib.exception.ServiceNotFoundException
 import link.portalbox.pplib.type.MarketplacePlugin
 import link.portalbox.pplib.type.MarketplaceService
-import link.portalbox.pplib.type.PluginService
+import link.portalbox.pplib.type.api.PluginService
 import link.portalbox.pplib.util.getPluginIndex
-import java.lang.reflect.Type;
-import com.google.gson.reflect.TypeToken;
-import link.portalbox.pplib.service.SpigotMCService
+import link.portalbox.pplib.util.separateServiceAndName
 
 
 object MarketplacePluginManager {
@@ -43,14 +41,8 @@ object MarketplacePluginManager {
      * @throws ServiceNotFoundException if the specified service is not found in the services map
      */
     fun getPlugin(id: String): MarketplacePlugin {
-        val args = id.split(":").toMutableList()
-        val marketplaceService = MarketplaceService.valueOf(args[0].uppercase())
-
-        if (args.size == 3) {
-            args[1] = "${args[1]}:${args[2]}"
-        }
-
-        return getPlugin(marketplaceService, args[1])
+        val pair = separateServiceAndName(id)
+        return getPlugin(pair.first, pair.second)
     }
 
     /**

@@ -1,14 +1,12 @@
 package link.portalbox.pplib.util
 
+import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import link.portalbox.pplib.exception.PluginNotFoundException
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.net.HttpURLConnection
-import java.net.URI
 import java.net.URL
-import java.net.URLEncoder
 import javax.net.ssl.HttpsURLConnection
 
 /**
@@ -17,15 +15,24 @@ import javax.net.ssl.HttpsURLConnection
  * @param urlString The URL from which to retrieve the JSON content.
  * @return The JSON content as a String, or null if an error occurs.
  */
-fun getJSONFromURL(url: String) : JsonObject {
-    return JsonParser.parseString(
-        getClient().newCall(Request.Builder()
+fun getJsonObjectFromURL(url: String) : JsonObject {
+    return getJsonFromURL(url).asJsonObject
+}
+
+fun getJsonFromURL(url: String): JsonElement {
+    return JsonParser.parseString(getStringFromURL(url))
+}
+
+fun getStringFromURL(url: String): String {
+    return getClient().newCall(
+        Request.Builder()
             .url(url)
             .header("User-Agent", "portal-box/pp-lib")
             .build()
-        ).execute().body.string()
-    ).asJsonObject
+    ).execute().body.string()
 }
+
+
 
 /**
  * Returns the JSON content of a PortalBox plugin with the given ID.
@@ -34,7 +41,7 @@ fun getJSONFromURL(url: String) : JsonObject {
  * @return the JSON content of the plugin, or null if an error occurs
  */
 fun getPortalBoxPluginJSON(id: Int): JsonObject {
-    return getJSONFromURL("https://api.portalbox.link/plugins/$id")
+    return getJsonObjectFromURL("https://api.portalbox.link/plugins/$id")
 }
 
 /**
@@ -43,7 +50,7 @@ fun getPortalBoxPluginJSON(id: Int): JsonObject {
  * @return the JSON string for the resource, or null if an error occurred
  */
 fun getSpigetJSON(id: String): JsonObject {
-    return getJSONFromURL("https://api.spiget.org/v2/resources/$id")
+    return getJsonObjectFromURL("https://api.spiget.org/v2/resources/$id")
 }
 
 /**

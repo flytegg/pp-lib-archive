@@ -2,18 +2,25 @@ package link.portalbox.pplib.util
 
 import com.google.gson.Gson
 import com.google.gson.JsonObject
-import com.google.gson.JsonParser
 import com.google.gson.reflect.TypeToken
-import link.portalbox.pplib.type.PostError
-import link.portalbox.pplib.type.RequestPlugin
+import link.portalbox.pplib.exception.PluginNotFoundException
+import link.portalbox.pplib.exception.ServiceNotFoundException
+import link.portalbox.pplib.manager.MarketplacePluginManager
+import link.portalbox.pplib.type.MarketplacePlugin
+import link.portalbox.pplib.type.MarketplaceService
+import link.portalbox.pplib.type.api.PostError
+import link.portalbox.pplib.type.api.RequestPlugin
 import link.portalbox.pplib.type.VersionType
+import link.portalbox.pplib.type.api.PluginService
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
-import java.lang.Exception
 
-const val BASE_DOMAIN = "https://api.portalbox.link"
+//const val BASE_DOMAIN = "https://api.portalbox.link"
+const val BASE_DOMAIN = "http://localhost:5005"
+
+private val gson = Gson()
 
 /**
  * Retrieves the latest version of the plugin from the API.
@@ -46,7 +53,7 @@ fun getLatestVersion(version: String): VersionType {
  */
 fun getPPVersions(): LinkedHashMap<String, String>? {
     return Gson().fromJson(
-        getJSONFromURL("$BASE_DOMAIN/versions").asJsonObject.get("versions"),
+        getJsonObjectFromURL("$BASE_DOMAIN/versions").asJsonObject.get("versions"),
         object : TypeToken<LinkedHashMap<String, String>>() {}.type
     )
 }
@@ -56,7 +63,7 @@ fun getPPVersions(): LinkedHashMap<String, String>? {
  * @return A JSON string representing the plugin index.
  */
 fun getPluginIndex(): JsonObject {
-    return getJSONFromURL("$BASE_DOMAIN/v2/plugins")
+    return getJsonObjectFromURL("$BASE_DOMAIN/v2/plugins")
 }
 
 /**
@@ -65,7 +72,7 @@ fun getPluginIndex(): JsonObject {
  * @return A JSON string representing the plugin.
  */
 fun getPluginJSON(id: String): JsonObject {
-    return getJSONFromURL("$BASE_DOMAIN/v2/plugins/$id")
+    return getJsonObjectFromURL("$BASE_DOMAIN/v2/plugins/$id")
 }
 
 /**
@@ -76,7 +83,10 @@ fun requestPlugin(requestPlugin: RequestPlugin): String {
     val client = getClient()
     val request = Request.Builder()
         .url("$BASE_DOMAIN/v2/plugins")
-        .method("POST", Gson().toJson(requestPlugin).toString().toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull()))
+        .method(
+            "POST",
+            Gson().toJson(requestPlugin).toString().toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
+        )
         .build()
 
     client.newCall(request).execute().use { response ->
@@ -85,17 +95,51 @@ fun requestPlugin(requestPlugin: RequestPlugin): String {
     }
 }
 
-
-
 fun sendError(postError: PostError): String {
     val client = getClient()
     val request = Request.Builder()
         .url("$BASE_DOMAIN/errors")
-        .method("POST", Gson().toJson(postError).toString().toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull()))
+        .method(
+            "POST",
+            Gson().toJson(postError).toString().toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
+        )
         .build()
 
     client.newCall(request).execute().use { response ->
         if (!response.isSuccessful) throw IOException("Unexpected code $response")
         return response.body.string()
     }
+}
+
+private fun searchPlugins(filter: String, exact: Boolean): ArrayList<String> {
+    return gson.fromJson(getJsonFromURL("$BASE_DOMAIN/v2/plugins/search?filter=$filter"), ArrayList<String>().javaClass)
+}
+
+fun getPluginFromName(filter: String): MarketplacePlugin {
+    if (filter.contains(":")) {
+        separateServiceAndName(filter).let {
+            return MarketplacePluginManager.getPlugin(it.first, it.second)
+        }
+    }
+
+   return  MarketplacePluginManager.getPlugin(getPluginIdFromName(filter) ?: throw PluginNotFoundException())
+}
+
+fun searchPlugins(filter: String): ArrayList<String> {
+    return searchPlugins(filter, false)
+}
+
+fun getPluginIdFromName(name: String): String? {
+    return getStringFromURL("$BASE_DOMAIN/v2/plugins/getIdFromName?name=$name")
+}
+
+fun separateServiceAndName(id: String): Pair<MarketplaceService, String> {
+    val split = id.split(":")
+    var pluginName = split[1]
+
+    if (split.size == 3) {
+        pluginName = "${split[1]}:${split[2]}"
+    }
+
+    return Pair(MarketplaceService.valueOf(split[0].uppercase()), pluginName)
 }

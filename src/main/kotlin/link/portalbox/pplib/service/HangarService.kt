@@ -3,7 +3,7 @@ package link.portalbox.pplib.service
 import gg.flyte.hangerApi.HangarClient
 import link.portalbox.pplib.type.MarketplacePlugin
 import link.portalbox.pplib.type.MarketplaceService
-import link.portalbox.pplib.type.PluginService
+import link.portalbox.pplib.type.api.PluginService
 
 class HangarService : PluginService {
     override fun getPlugin(id: String): MarketplacePlugin {

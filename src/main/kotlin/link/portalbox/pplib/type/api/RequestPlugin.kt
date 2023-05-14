@@ -1,4 +1,6 @@
-package link.portalbox.pplib.type
+package link.portalbox.pplib.type.api
+
+import link.portalbox.pplib.type.MarketplaceService
 
 data class RequestPlugin(
     val id: String,
