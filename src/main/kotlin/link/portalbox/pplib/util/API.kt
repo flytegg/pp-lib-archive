@@ -111,7 +111,7 @@ fun sendError(postError: PostError): String {
     }
 }
 
-private fun searchPlugins(filter: String, exact: Boolean): ArrayList<String> {
+private fun searchPlugins(filter: String): ArrayList<String> {
     return gson.fromJson(getJsonFromURL("$BASE_DOMAIN/v2/plugins/search?filter=$filter"), ArrayList<String>().javaClass)
 }
 
@@ -122,11 +122,7 @@ fun getPluginFromName(filter: String): MarketplacePlugin {
         }
     }
 
-   return  MarketplacePluginManager.getPlugin(getPluginIdFromName(filter) ?: throw PluginNotFoundException())
-}
-
-fun searchPlugins(filter: String): ArrayList<String> {
-    return searchPlugins(filter, false)
+    return  MarketplacePluginManager.getPlugin(getPluginIdFromName(filter) ?: throw PluginNotFoundException())
 }
 
 fun getPluginIdFromName(name: String): String? {
