@@ -125,7 +125,7 @@ fun getPluginFromName(filter: String): MarketplacePlugin {
     return  MarketplacePluginManager.getPlugin(getPluginIdFromName(filter) ?: throw PluginNotFoundException())
 }
 
-fun getPluginIdFromName(name: String): String? {
+fun getPluginIdFromName(name: String): String {
     return getStringFromURL("$BASE_DOMAIN/v2/plugins/getIdFromName?name=$name")
 }
 
