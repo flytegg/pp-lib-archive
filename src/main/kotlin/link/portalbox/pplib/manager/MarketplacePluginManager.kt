@@ -15,10 +15,8 @@ import link.portalbox.pplib.util.separateServiceAndName
 object MarketplacePluginManager {
 
     // BiMap<Id, String>
-    var marketplaceCache: BiMap<String, String> = HashBiMap.create()
 
     private val services: MutableMap<MarketplaceService, PluginService> = mutableMapOf()
-    private val gson = Gson()
 
     /**
      * Gets a MarketplacePlugin object for the specified plugin ID (without service in string) from the specified MarketplaceService.
@@ -55,31 +53,4 @@ object MarketplacePluginManager {
         services[service] = pluginService
     }
 
-    /**
-     * Loads the plugin index data from the server and parses it into the marketplaceCache.
-     */
-    fun loadIndex() {
-        val jsonObject: JsonObject = Gson().fromJson(getPluginIndex(), JsonObject::class.java)
-
-        for (entry in jsonObject.entrySet()) {
-            for (pluginEntry in entry.value.asJsonObject.entrySet()) {
-                val serviceName = entry.key
-                if (!marketplaceCache.containsKey("${serviceName}:${pluginEntry.key}") && !marketplaceCache.containsValue("${serviceName}:${pluginEntry.value.asString}")) {
-                    marketplaceCache["${serviceName}:${pluginEntry.key}"] = "${serviceName}:${pluginEntry.value.asString}"
-                }
-            }
-        }
-    }
-
-        /*
-        val gson = Gson()
-        val jsonData: JsonElement = gson.fromJson(getPluginIndex(), JsonElement::class.java)
-        for ((key, value) in jsonData.asJsonObject.entrySet()) {
-            kotlin.runCatching {
-                marketplaceCache[key.toInt()] = value.asString
-            }
-        }
-    }
-
-         */
 }
