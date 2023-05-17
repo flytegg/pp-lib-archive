@@ -1,20 +1,12 @@
 package link.portalbox.pplib.manager
 
-import com.google.common.collect.BiMap
-import com.google.common.collect.HashBiMap
-import com.google.gson.Gson
-import com.google.gson.JsonObject
 import link.portalbox.pplib.exception.ServiceNotFoundException
 import link.portalbox.pplib.type.MarketplacePlugin
 import link.portalbox.pplib.type.MarketplaceService
 import link.portalbox.pplib.type.api.PluginService
-import link.portalbox.pplib.util.getPluginIndex
-import link.portalbox.pplib.util.separateServiceAndName
 
 
 object MarketplacePluginManager {
-
-    // BiMap<Id, String>
 
     private val services: MutableMap<MarketplaceService, PluginService> = mutableMapOf()
 
@@ -39,7 +31,8 @@ object MarketplacePluginManager {
      * @throws ServiceNotFoundException if the specified service is not found in the services map
      */
     fun getPlugin(id: String): MarketplacePlugin {
-        val pair = separateServiceAndName(id)
+        //val pair = separateServiceAndName(id)
+        val pair = Pair(MarketplaceService.SPIGOTMC, id.split(":")[1])
         return getPlugin(pair.first, pair.second)
     }
 

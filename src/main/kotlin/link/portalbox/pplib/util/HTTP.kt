@@ -1,30 +1,16 @@
 package link.portalbox.pplib.util
 
-import com.google.gson.JsonElement
-import com.google.gson.JsonObject
-import com.google.gson.JsonParser
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.Response
 import java.net.HttpURLConnection
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 
-/**
- * Retrieves JSON content from the specified URL.
- *
- * @param urlString The URL from which to retrieve the JSON content.
- * @return The JSON content as a String, or null if an error occurs.
- */
-fun getJsonObjectFromURL(url: String) : JsonObject {
-    return getJsonFromURL(url).asJsonObject
-}
-
-fun getJsonFromURL(url: String): JsonElement {
-    return JsonParser.parseString(getStringFromURL(url))
-}
+val okHttpClient = OkHttpClient.Builder().build()
 
 fun getStringFromURL(url: String): String {
-    return getClient().newCall(
+    return okHttpClient.newCall(
         Request.Builder()
             .url(url)
             .header("User-Agent", "portal-box/pp-lib")
@@ -40,8 +26,8 @@ fun getStringFromURL(url: String): String {
  * @param id the ID of the plugin to retrieve
  * @return the JSON content of the plugin, or null if an error occurs
  */
-fun getPortalBoxPluginJSON(id: Int): JsonObject {
-    return getJsonObjectFromURL("https://api.portalbox.link/plugins/$id")
+fun getPortalBoxPluginJSON(id: Int): String {
+    return getStringFromURL("https://api.portalbox.link/plugins/$id")
 }
 
 /**
@@ -49,8 +35,8 @@ fun getPortalBoxPluginJSON(id: Int): JsonObject {
  * @param id the ID of the resource to fetch
  * @return the JSON string for the resource, or null if an error occurred
  */
-fun getSpigetJSON(id: String): JsonObject {
-    return getJsonObjectFromURL("https://api.spiget.org/v2/resources/$id")
+fun getSpigetJSON(id: String): String {
+    return getStringFromURL("https://api.spiget.org/v2/resources/$id")
 }
 
 /**
@@ -73,30 +59,6 @@ fun isDirectDownload(urlString: String): Boolean {
 
         contentType == "application/octet-stream" && contentLength != -1
     }.getOrDefault(false)
-}
-
-/**
- * Converts a GitHub repository URL to its corresponding API URL.
- * @param url the GitHub repository URL to convert.
- * @return the corresponding GitHub API URL.
- */
-fun convertGitHubToAPI(url: String): String {
-    val split = url.split("/")
-    return "https://api.github.com/repos/${split[3]}/${split[4]}/releases/latest"
-}
-
-/**
- * Returns a URL object for the given URL string.
- *
- * @param url the URL string to convert to a URL object
- * @return a URL object or null if the conversion failed
- */
-fun getURL(url: String?): URL? {
-    return runCatching {
-        URL(url)
-    }.onFailure {
-        // log(Level.WARNING, "Failed to get URL from string: $url", it)
-    }.getOrNull()
 }
 
 /**
@@ -131,7 +93,36 @@ fun isJarFile(url: URL?): Boolean {
     }.getOrDefault(false)
 }
 
-fun getClient() : OkHttpClient {
-    return OkHttpClient.Builder()
+fun isJarFileDownload(url: String): Boolean {
+    val request = Request.Builder()
+        .url(getFinalRedirect(url))
         .build()
+    var response: Response? = null
+    try {
+        response = okHttpClient.newCall(request).execute()
+        val contentType = response.header("Content-Type")
+        val contentDisposition = response.header("Content-Disposition")
+        return (contentType != null && contentType == "application/java-archive")
+                || (contentDisposition != null && contentDisposition.contains(".jar"))
+                || (url.endsWith(".jar"))
+    } catch (e: Exception) {
+        e.printStackTrace()
+    } finally {
+        response?.close()
+    }
+    return false
+}
+
+fun getFinalRedirect(url: String): String {
+    var request = Request.Builder().url(url).head().build()
+    var response = okHttpClient.newCall(request).execute()
+
+    while (response.isRedirect) {
+        response.close()
+        val redirectUrl: String = response.header("Location") ?: "none"
+        request = Request.Builder().url(redirectUrl).head().build()
+        response = okHttpClient.newCall(request).execute()
+    }
+
+    return response.request.url.toString()
 }

@@ -1,6 +1,6 @@
 package link.portalbox.pplib.service
 
-import gg.flyte.hangerApi.HangarClient
+import gg.flyte.hangarWrapper.HangarClient
 import link.portalbox.pplib.type.MarketplacePlugin
 import link.portalbox.pplib.type.MarketplaceService
 import link.portalbox.pplib.type.api.PluginService
