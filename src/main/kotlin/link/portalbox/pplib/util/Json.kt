@@ -1,5 +1,10 @@
 package link.portalbox.pplib.util
 
-import com.squareup.moshi.Moshi
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.ObjectMapper
 
-val moshiClient = Moshi.Builder().build()
+val objectMapper = ObjectMapper()
+
+fun getJsonTree(json: String): JsonNode {
+    return objectMapper.readTree(json)
+}

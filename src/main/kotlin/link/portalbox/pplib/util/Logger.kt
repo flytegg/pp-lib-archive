@@ -111,17 +111,4 @@ private fun saveToLog(message: String) {
         it.printStackTrace()
     }
 }
-//
-//fun startErrorCatcher(postError: PostError) {
-//    defaultPostError = postError
-//    Thread.setDefaultUncaughtExceptionHandler { _, e ->
-//        e.printStackTrace()
-//        sendError(
-//            PostError(
-//            defaultPostError.pluginVersion,
-//            defaultPostError.mcVersion,
-//            e.stackTraceToString(),
-//        )
-//        )
-//    }
-//}
+
