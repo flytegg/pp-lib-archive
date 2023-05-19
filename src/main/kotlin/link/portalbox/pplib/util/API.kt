@@ -9,6 +9,7 @@ import link.portalbox.pplib.type.api.PostError
 import link.portalbox.pplib.type.api.RequestPlugin
 import link.portalbox.pplib.type.VersionType
 import link.portalbox.pplib.type.api.APIPlugin
+import link.portalbox.pplib.type.api.Versions
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -22,7 +23,7 @@ var BASE_DOMAIN = "https://api.portalbox.link"
  * @return the latest version of the plugin
  */
 fun getLatestPPVersion(): String {
-    return getPPVersions().values.toTypedArray().lastIndex.let { getPPVersions().values.toTypedArray()[it] }
+    return getPPVersions().versions.entries.last().value
 }
 
 fun getLatestVersion(version: String): VersionType {
@@ -45,8 +46,8 @@ fun getLatestVersion(version: String): VersionType {
  *
  * @return a LinkedHashMap containing the plugin hash and its version.
  */
-fun getPPVersions(): LinkedHashMap<String, String> {
-    return objectMapper.readValue("$BASE_DOMAIN/versions", object : TypeReference<LinkedHashMap<String, String>>() {})
+fun getPPVersions(): Versions {
+    return objectMapper.readValue(getStringFromURL("$BASE_DOMAIN/versions"), Versions::class.java)
 }
 
 ///**
